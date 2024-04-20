@@ -400,3 +400,115 @@ In this part, you will understand and learn how to implement the following Machi
 6. Random Forest Regression
 
 ## Section 6: Simple Linear Regression
+### Entrance
+*  So here's the equation, and we will look at the parts of this equation one by one. So on the left, we have our dependent variable,  which we're trying to predict.
+* On the right, we have our independent variable, which is the predictor. Here we have b0, which is the y-intercept, also known as the constant,  and b1 is the slope coefficient.  
+![Simple Linear Regression](./SECTION-6/simple_linear_regression.png)
+* we are going to use that example we mentioned about **predicting the output of potatoes on a farm**  based on the **amount of fertilizer** that we use.
+![Fitulizer and Potato harvesting relation](./SECTION-6/slr_firtulizer_potatoes.png)
+*  let's say that we ran  the simple linear regression algorithm, and it came up with the following values. B0 equals eight tons, and b1 equals three tons per kilogram.
+* B0 equals eight tons,  and b1 equals three tons per kilogram.
+* How can we better understand this on an intuitive level?
+So let's plot a simple scatter plot. So here we have on the x-axis the nitrogen fertilizer used in kilograms. That's our x1 variable. And here we have the y variable,  which is the potato yield in tons.And here on the scatter plot, we have several data points. 
+What are these data points? 
+* Well, each one represents a separate harvest  on the farm that we are talking about. So multiple times the potatoes  were harvested over many years, and the farmer recorded how much fertilizer they used and also how many potatoes they were able to harvest.
+* if you increase the amount of nitrogen fertilizer  by one kilogram, then the amount of potato output will increase by three tons. And, of course, these numbers are made up for illustrative purposes.
+### Ordinary Least Squares
+Ordinary Least Squares (OLS) is a method used in statistics and econometrics to estimate the parameters in a linear regression model. In simple terms, it's a way to find the line that best fits a set of data points by minimizing the sum of the squared differences between the observed values and the values predicted by the line.
+
+#### Here's how it works with an example:
+
+Let's say we have a dataset that represents the relationship between the number of hours studied and the score obtained on a test. We want to determine if there's a linear relationship between these two variables and if so, how strong it is.
+
+Here's a small subset of the dataset:
+
+| Hours Studied (X) | Test Score (Y) |
+|-------------------|----------------|
+|        1          |       60       |
+|        2          |       65       |
+|        3          |       70       |
+|        4          |       75       |
+|        5          |       80       |
+
+Now, we want to find the line that best represents the relationship between hours studied (X) and test score (Y). We assume a simple linear relationship of the form:
+
+Y = beta_0 + beta_1 * X
+
+Where:
+-  *Y* is the test score,
+-  *X* is the hours studied,
+-  *beta_0* is the intercept (the value of Y when X is zero),
+-  *beta_1* is the slope (how much Y changes for a one-unit change in X).
+
+The goal of OLS is to find the values of *beta_0* and *beta_1* that minimize the sum of the squared differences between ***the observed test scores*** and the ***test scores predicted by the line***.
+
+**For our example**, the OLS method would find the values of **beta_0** and **beta_1** that minimize the sum of the squared differences between the actual test scores and the ones predicted by the line. Once those values are determined, we have our linear regression equation, and we can use it to predict test scores for any given number of hours studied.
+
+In this case, the OLS method would give us the equation of the line, something like:
+
+Test Score= 55 + 5*(Hours Studied)
+
+This equation represents the best fit line through our data points, and we can use it to predict test scores for any number of hours studied within the range of our data.
+
+####  OLS solution step by step
+Let's solve the problem step by step using Ordinary Least Squares (OLS) to find the linear regression equation for the relationship between hours studied and test scores.
+
+Step 1: Calculate the means of the hours studied *avr_X* and test scores *avr_Y*.
+
+avr_X = (1 + 2 + 3 + 4 + 5)/(5) = 3
+
+avr_Y = (60 + 65 + 70 + 75 + 80)/(5) = 70
+
+Step 2: Calculate the deviations from the means for both hours studied (X-avr_X) and test scores (Y-avr_Y).
+
+| Hours Studied (X) | Test Score (Y) | ( X - avr_X ) | ( Y - avr_Y ) |
+|-------------------|----------------|-------------------|-------------------|
+|        1          |       60       |        -2         |       -10         |
+|        2          |       65       |        -1         |        -5         |
+|        3          |       70       |         0         |         0         |
+|        4          |       75       |         1         |         5         |
+|        5          |       80       |         2         |        10         |
+
+Step 3: Calculate the squared deviations for both hours studied ( (X - avr_X)^2 ) and test scores ( (Y - avr_Y)^2 ).
+
+| Hours Studied (X) | Test Score (Y) | (X - avr_X)^2 |  (Y - avr_Y)^2  |
+|-------------------|----------------|-----------------------|-----------------------|
+|        1          |       60       |           4           |          100          |
+|        2          |       65       |           1           |           25          |
+|        3          |       70       |           0           |            0          |
+|        4          |       75       |           1           |           25          |
+|        5          |       80       |           4           |          100          |
+
+Step 4: Calculate the product of the deviations for each data point ((X - avr_X)(Y - avr_Y)).
+
+| Hours Studied (X) | Test Score (Y) | (X - avr_X)(Y - avr_Y) |
+|-------------------|----------------|----------------------------------|
+|        1          |       60       |               20                 |
+|        2          |       65       |                5                 |
+|        3          |       70       |                0                 |
+|        4          |       75       |                5                 |
+|        5          |       80       |               20                 |
+
+Step 5: Calculate the slope (beta_1) using the formula:
+
+beta_1 = (sum (X - avr_X)(Y - avr_Y))/(sum (X - avr_X)^2)
+
+beta_1 = (20 + 5 + 0 + 5 + 20)/(4) = (50)/(4) = 12.5
+
+Step 6: Calculate the intercept (beta_0) using the formula:
+
+beta_0 = avr_Y - beta_1 *avr_X 
+
+beta_0 = 70 - 12.5 * 3 = 70 - 37.5 = 32.5
+
+Step 7: Write down the linear regression equation using the calculated values of (beta_0) and (beta_1):
+
+Test Score = 32.5 + 12.5 *(Hours Studied)
+
+So, the linear regression equation for this dataset is:
+
+Test Score = 32.5 + 12.5 *(Hours Studied)
+
+This equation represents the best-fit line through the given data points, allowing us to predict test scores based on the number of hours studied.
+
+#### SLR code example
