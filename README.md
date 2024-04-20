@@ -71,3 +71,310 @@ and we divide by the standard deviation.
 ![Feature scaling result](./SECTION-2/fs-result.png)
 * after scaling it is significant we can group purple and blue person 
 ![Feature scaling grouping](./SECTION-2/grouping.png)
+
+## Section 3: Data Preprocessing in Python
+in this section we will learn the steps of feature scaling, we will implement all the code in python.
+all the examples we are going to make will have same structure like below.
+
+### Importing the libraries
+1. **NumPy** will allow us to work with arrays because indeed you will see that your future machinery models will expect some arrays as input, and therefore, we need the library to work with these arrays, and that's NumPy.
+2. Then we'll import **matplotlib**, which is the library that will allow us to plot some very nice charts. You will see that we will plot actually many charts and graphs in this course.
+3. finally, **pandas**, which Will allow us to not only import the dataset, but also create the matrix of features and the dependent variable vector.
+
+```
+import numpy as np
+import matplotlib.pyplot as plt
+import pandas as pd
+
+```
+### Importing the dataset
+1. Here we are taking retail company data as example but this code can be changed depends your dataset, here we have 'purchased' column as result, all the columns will be our data processing and matrix data except 'purchased' column because it is result and it will be array.
+2. #1_line the problem python will not find this file, you need to give full path.
+3. #2_line here iloc is matrix and you give rows and columns cordinates 
+    * **'1:3, 1:5'** -> thats mean 1.row till 3.row and 1.column till 5.column
+    * **':, :'** -> all rows and columns
+    * **':2, :-1'** -> from first rows to second row and all columns except last one.  
+    * **':2, -1'** -> from first rows to second row and just last column because there is no range.
+there are various approach to seperate data I will inform with future examples
+ ```
+dataset = pd.read_csv('Data.csv') #1_line
+X = dataset.iloc[:, :-1].values #2_line
+y = dataset.iloc[:, -1].values
+ ```
+
+### Taking care of missing data
+we notice that there is a missing salary here for this specific customer from Germany of 40 years old, and who purchased the product.. 
+1. in your data set, for the simple reason that it can cause some errors when training your machine learning model, and therefore you must handle them. there are actually several ways to handle them, a first way is to just ignore the observation by deleting it.
+2. and now a second way, and this is what we're adding right now in the toolkit, is to actually replace the missing data, you know, the missing value, by the average of all the values in the column, in which the data is missing.
+3. explanation of the code
+    * #line_1 -> here you import most known library for data processing you can also move that to import library section
+    * #line_2 -> here we create new object of imputer and we gave the strategy and say fill the null(nan) values with 'mean'(average of columns)
+    * #line_3 -> here basiccaly you gave the cordinates of your rows and columns to imputer basiccaly all the rows and from columns will be in array world -> first and second
+    * #line_4 -> here we just replace data in the x matrix with processed one
+```
+from sklearn.impute import SimpleImputer #line_1
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean') #line_2
+imputer.fit(X[:, 1:3]) #line_3
+X[:, 1:3] = imputer.transform(X[:, 1:3]) #line_4
+```
+### Encoding categorical data
+here we have two places to encode first is independent thats mean the data we are going to process.
+and the second one dependent data this is basically result of data.
+#### Encoding the Independent Variable
+* Let's open the data set again. And as we can see, this data set contains one column with categories, you know, France, Spain, or Germany. First, you might guess that it'll be difficult for machine learning model to compute some correlations between these columns. but we can not give just 0,1 and 2 there should be interpered relations between data.   
+* we can do better is actually one hot encoding and one hot encoding consists of turning this country column into three columns.  
+* Why three columns?  Because there are actually three different classes in this country column, you know, three different categories. If there were, for example, five countries here, we would turn this column into five columns. And one hot encoding consists of creating binary vectors for each of the countries.  
+* So very simply, France would, for example have the vector 1 0 0. Spain would have the vector 0 1 0 and Germany would have the vector 0 0 1.
+* Explanation
+    * #line_1 -> import ColumnTransformer you can add to import library part
+    * #line_2 -> import OneHotEncoder you can add to import library part
+    * #line_3 -> first param -> we give encoder as OneHotEncoder and we say encoder transform just first column, you can give label of columns as categorial features ['Country']
+    * passthrough -> thats mean dont add remain columns to transformer and encoder, keep others safe
+    * then we apply transformed value to X matrix
+```
+from sklearn.compose import ColumnTransformer #line_1
+from sklearn.preprocessing import OneHotEncoder #line_2
+ct = ColumnTransformer(transformers=[('encoder', OneHotEncoder(), [0])], remainder='passthrough') #line_3
+X = np.array(ct.fit_transform(X)) #line4
+```
+#### Encoding the Dependent Variable
+Here basically we are going to encode Yes and No variables. so that we are going to use LabelEncoder. 
+it is single line vector
+* here basiccaly we import LabelEncoder and then transform it.
+```
+from sklearn.preprocessing import LabelEncoder
+le = LabelEncoder()
+y = le.fit_transform(y)
+```
+### Splitting the dataset into the Training set and Test set
+* Here we are going to split the data set into the training set and the test set.
+* Do we have to apply feature scaling before splitting the data set into the training set and test set, or after?
+    * There is only one right answer, which is by the way, totally obvious after you get the explanation. So, the answer is we have to apply feature scaling after splitting the data set into the training set and the test set.
+```
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 1)
+```
+### Feature Scaling
+here we are going to use StandardScaler but there are also many different Scalers and for example Normalisation
+you can find more information about feature scaling in section 2
+```
+from sklearn.preprocessing import StandardScaler
+sc = StandardScaler()
+X_train[:, 3:] = sc.fit_transform(X_train[:, 3:])
+X_test[:, 3:] = sc.transform(X_test[:, 3:])
+```
+
+### [Coding Exercise 1](https://en.wikipedia.org/wiki/Iris_flower_data_set)
+Coding Exercise 1: Importing and Preprocessing a Dataset for Machine Learning, 
+1. It is sometimes called Anderson's Iris data set because Edgar Anderson collected the data to quantify the morphologic variation of Iris flowers of three related species.[2] Two of the three species were collected in the Gaspé Peninsula "all from the same pasture, and picked on the same day and measured at the same time by the same person with the same apparatus"
+2. The data set consists of 50 samples from each of three species of Iris (Iris setosa, Iris virginica and Iris versicolor). Four features were measured from each sample: the length and the width of the sepals and petals, in centimeters. Based on the combination of these four features, Fisher developed a linear discriminant model to distinguish the species from each other. Fisher's paper was published in the Annals of Eugenics (today the Annals of Human Genetics).[1]
+
+#### Instructions
+1. Import the necessary Python libraries: You will need the pandas library for this exercise. Also import numpy and train_test_split from sklearn.model_selection.
+2. Load the Iris dataset: The Iris dataset is stored in a CSV file named 'iris.csv'. Use the pandas function read_csv to load this file and store it in a DataFrame. Assign the DataFrame to a variable named dataset.
+3. Identify the features and the dependent variable: The features (independent variables) in the Iris dataset are the lengths and widths of the petals and sepals, and the dependent variable is the species of the Iris. The features are stored in all columns except the last one in your DataFrame, and the dependent variable is stored in the last column.
+4. Create the matrix of features (X) and the dependent variable vector (y): Use the iloc indexer in pandas to select these subsets of the data and store them in variables X and y respectively. You should use the .values attribute to extract the data as numpy arrays.
+5. Print X and y: Finally, print the matrix of features (X) and the dependent variable vector (y) to verify their creation. You can use the print function for this.
+#### Solution
+```
+# Importing the necessary libraries
+import pandas as pd
+import numpy as np 
+
+# Loading the Iris dataset
+dataset = pd.read_csv('iris.csv')
+
+
+# Creating the matrix of features (X) and the dependent variable vector (y) 
+X = dataset.iloc[:, :-1].values 
+y = dataset.iloc[:, -1].values
+
+# Printing the matrix of features and the dependent variable vector
+print(X)
+print(y)
+```
+### [Coding Exercise 2](https://www.kaggle.com/datasets/uciml/pima-indians-diabetes-database)
+Predict the onset of diabetes based on diagnostic measures
+#### Instructions
+1. Import the necessary Python libraries for data preprocessing, including the `SimpleImputer` class from the scikit-learn library.
+
+2. Load the dataset into a pandas DataFrame using the `read_csv` function from the pandas library. The dataset name is 'pima-indians-diabetes.csv'
+
+3. Identify missing data in your dataset. Print out the number of missing entries in each column. Analyze its potential impact on machine learning model training. This step is crucial as missing data can lead to inaccurate and misleading results.
+
+4. Implement a strategy for handling missing data, which is to replace it with the mean value, based on the nature of your dataset. Other strategies might include dropping the rows or columns with missing data, or replacing the missing data with a median or a constant value.
+
+5. Configure an instance of the `SimpleImputer` class to replace missing values with the mean value of the column.
+
+6. Apply the `fit` method of the `SimpleImputer` class on the numerical columns of your matrix of features.
+
+7. Use the `transform` method of the `SimpleImputer` class to replace missing data in the specified numerical columns.
+
+8. Update the matrix of features by assigning the result of the `transform` method to the correct columns.
+
+9. Print your updated matrix of features to verify the success of the missing data replacement.
+#### Solution
+```
+# Importing the necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.impute import SimpleImputer
+
+# Load the dataset
+df = pd.read_csv('pima-indians-diabetes.csv')
+
+# Identify missing data (assumes that missing data is represented as NaN)
+missing_data = df.isnull().sum()
+
+# Print the number of missing entries in each column
+print("Missing data: \n", missing_data)
+
+# Configure an instance of the SimpleImputer class
+imputer = SimpleImputer(missing_values=np.nan, strategy='mean')
+
+# Fit the imputer on the DataFrame
+imputer.fit(df)
+# Apply the transform to the DataFrame
+df_imputed = imputer.transform(df)
+#Print your updated matrix of features
+print("Updated matrix of features: \n", df_imputed)
+```
+### [Coding Exercise 3](https://www.kaggle.com/c/titanic/data)
+Start here! Predict survival on the Titanic and get familiar with ML basics
+#### Instructions
+1. Import required libraries - Pandas, Numpy, and required classes for this task - ColumnTransformer, OneHotEncoder, LabelEncoder.
+
+2. Start by loading the Titanic dataset into a pandas data frame. This can be done using the pd.read_csv function. The dataset's name is 'titanic.csv'.
+
+3. Identify the categorical features in your dataset that need to be encoded. You can store these feature names in a list for easy access later.
+
+4. To apply OneHotEncoding to these categorical features, create an instance of the ColumnTransformer class. Make sure to pass the OneHotEncoder() as an argument along with the list of categorical features.
+
+5. Use the fit_transform method on the instance of ColumnTransformer to apply the OneHotEncoding.
+
+6. The output of the fit_transform method should be converted into a NumPy array for further use.
+
+7. The 'Survived' column in your dataset is the dependent variable. This is a binary categorical variable that should be encoded using LabelEncoder.
+
+8.  Print the updated matrix of features and the dependent variable vector
+
+#### Solution
+```
+# Importing the necessary libraries
+import pandas as pd
+import numpy as np
+from sklearn.compose import ColumnTransformer
+from sklearn.preprocessing import OneHotEncoder, LabelEncoder
+
+# Load the dataset
+df = pd.read_csv('titanic.csv')
+
+# Identify the categorical data
+categorical_features = ['Sex', 'Embarked', 'Pclass']
+
+# Implement an instance of the ColumnTransformer class
+ct = ColumnTransformer(
+    transformers=[
+        ('encoder', OneHotEncoder(), categorical_features)
+    ], remainder='passthrough')
+
+
+# Apply the fit_transform method on the instance of ColumnTransformer
+ft = ct.fit_transform(df)
+
+
+# Convert the output into a NumPy array
+X = np.array(ft)
+
+# Use LabelEncoder to encode binary categorical data
+le = LabelEncoder()
+y = le.fit_transform(df['Survived'])
+
+# Print the updated matrix of features and the dependent variable vector
+print("Updated matrix of features: \n", X)
+print("Updated dependent variable vector: \n", y)
+```  
+### [Coding Exercise 4](https://en.wikipedia.org/wiki/Iris_flower_data_set)  
+Same as Exercise 2
+#### Instructions
+1. Import necessary Python libraries: pandas, train_test_split from sklearn.model_selection, and StandardScaler from sklearn.preprocessing.
+
+2. Load the Iris dataset using Pandas read.csv. Dataset name is iris.csv.
+3. Use train_test_split to split the dataset into an 80-20 training-test set.
+4. Apply random_state with 42 value in train_test_split function for reproducible results.
+5. Print X_train, X_test, Y_train, and Y_test to understand the dataset split.
+6. Use StandardScaler to apply feature scaling on the training and test sets.
+7. Print scaled training and test sets to verify feature scaling.
+#### Solution
+```
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load the Iris dataset
+iris_df = pd.read_csv('iris.csv')
+
+# Separate features and target
+X = iris_df.drop('target', axis=1)
+y = iris_df['target']
+
+# Split the dataset into an 80-20 training-test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Apply feature scaling on the training and test sets
+sc = StandardScaler()
+X_train = sc.fit_transform(X_train)
+X_test = sc.transform(X_test)
+
+# Print scaled training and test sets
+print("Scaled Training Set:")
+print(X_train)
+print("\nScaled Test Set:")
+print(X_test)
+```
+### [Coding Exercise 5](https://www.kaggle.com/code/nimapourmoradi/red-wine-quality/input)
+This datasets is related to red variants of the Portuguese "Vinho Verde" wine. For more details, consult the reference [Cortez et al., 2009]. Due to privacy and logistic issues, only physicochemical (inputs) and sensory (the output) variables are available (e.g. there is no data about grape types, wine brand, wine selling price, etc.).
+#### Instructions
+1. Import the necessary libraries for data preprocessing, including the StandardScaler and train_test_split classes.
+2. Load the "Wine Quality Red" dataset into a pandas DataFrame. You can use the pd.read_csv function for this. Make sure you set the correct delimeter for the file.
+3. Split your dataset into an 80-20 training-test set. Set random_state to 42 to ensure reproducible results.
+4. Create an instance of the StandardScaler class.
+5. Fit the StandardScaler on features from the training set, excluding the target variable 'Quality'.
+6. Use the "fit_transform" method of the StandardScaler object on the training dataset.
+7. Apply the "transform" method of the StandardScaler object on the test dataset.
+8. Print your scaled training and test datasets to verify the feature scaling process.
+#### Solution
+```
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+
+# Load the Wine Quality Red dataset
+dataset = pd.read_csv('winequality-red.csv', delimiter=';')
+
+# Separate features and target
+X = dataset.drop('quality', axis=1)
+y = dataset['quality']
+
+# Split the dataset into an 80-20 training-test set
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create an instance of the StandardScaler class
+sc = StandardScaler()
+
+
+# Fit the StandardScaler on the features from the training set and transform it
+X_train = sc.fit_transform(X_train)
+
+# Apply the transform to the test set
+X_test = sc.transform(X_test)
+
+# Print the scaled training and test datasets
+print(X_train)
+print(X_test)
+```
+
+
+
