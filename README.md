@@ -5,6 +5,9 @@ Machine Learning A-Z: AI, Python & R + ChatGPT Prize
 #### Colab Notebooks
 [The whole Machine Learning A-Z folder: Code Templates (.ipynb, .py, R), Datasets and Colour Blind Friendly Images](https://sds-platform-private.s3-us-east-2.amazonaws.com/uploads/Machine-Learning-A-Z-Codes-Datasets.zip)
 
+#### Google Drive Codes
+[Google Drive codes](https://drive.google.com/drive/folders/1OFNnrHRZPZ3unWdErjLHod8Ibv2FfG1d)
+
 ## Section 1: Welcome to the course!
 ![Model result](./SECTION-1/model_and_dataset.png)
 **INFO** : Dataset is which with result that's mean with purchased or not information, other is our data and result is going to be our model.
@@ -376,5 +379,24 @@ print(X_train)
 print(X_test)
 ```
 
-### Section 4: Data Preprocessing in R
+## Section 4: Data Preprocessing in R
 I will skip this section because I just want to use python 
+
+## Section 5: Regression(Welcome)
+Regression models (both linear and non-linear) are used for predicting a real value, like salary for example. If your independent variable is time, then you are forecasting future values, otherwise your model is predicting present but unknown values. Regression technique vary from Linear Regression to SVR and Random Forests Regression.
+
+In this part, you will understand and learn how to implement the following Machine Learning Regression models:
+
+1. Simple Linear Regression
+
+2. Multiple Linear Regression
+
+3. Polynomial Regression
+
+4. Support Vector for Regression (SVR)
+
+5. Decision Tree Regression
+
+6. Random Forest Regression
+
+## Section 6: Simple Linear Regression
