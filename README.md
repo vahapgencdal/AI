@@ -376,5 +376,5 @@ print(X_train)
 print(X_test)
 ```
 
-
-
+### Section 4: Data Preprocessing in R
+I will skip this section because I just want to use python 
