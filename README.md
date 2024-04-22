@@ -512,3 +512,8 @@ Test Score = 32.5 + 12.5 *(Hours Studied)
 This equation represents the best-fit line through the given data points, allowing us to predict test scores based on the number of hours studied.
 
 #### SLR code example
+* You can find the code in [SECTION-6/slr.py](https://github.com/vahapgencdal/AI/blob/main/SECTION-6/slr.py) file
+* Visualize results
+![Simple Linear regression training result](./SECTION-6/slr-training-result.png)
+* and here We can visualize test results
+![Simple Linear regression test result](./SECTION-6/slr_test_results.png)
