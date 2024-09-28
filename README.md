@@ -517,3 +517,7 @@ This equation represents the best-fit line through the given data points, allowi
 ![Simple Linear regression training result](./SECTION-6/slr-training-result.png)
 * and here We can visualize test results
 ![Simple Linear regression test result](./SECTION-6/slr_test_results.png)
+
+## Section 7: Multi Linear Regression
+### Entrance
+ 

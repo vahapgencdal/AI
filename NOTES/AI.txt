@@ -1,0 +1,7 @@
+
+NASDAQ listed all companies: 
+https://www.nasdaq.com/market-activity/stocks/screener
+
+
+NASDAQ API CALL 1: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25
+NASDAQ API CALL 2: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25&exchange=NYSE&exsubcategory=NGM&marketcap=mega&recommendation=strong_buy|hold|buy|sell|strong_sell&sector=technology&region=north_america&country=united_states|usa
