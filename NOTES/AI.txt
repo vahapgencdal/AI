@@ -8,6 +8,10 @@ NASDAQ API CALL 2: https://api.nasdaq.com/api/screener/stocks?tableonly=false&li
 
 1- EDGAR NVDA:https://www.sec.gov/ix?doc=/Archives/edgar/data/1045810/000104581024000264/nvda-20240728.htm 
 2- companies and sic code databases: https://www.edgarcompany.sec.gov/servlet/CompanyDBSearch?start_row=1&end_row=10&main_back=2&cik=&company_name=&reporting_file_number=&series_id=&series_name=&class_contract_id=&class_contract_name=&state_country=NONE&city=&state_incorporation=NONE&zip_code=&last_update_from=&last_update_to=&page=summary&submit_button=Next+%3E%3E
+3- Request URL:
+https://data.sec.gov/submissions/CIK0001045810.json
+https://data.sec.gov/submissions/CIK0001045810-submissions-001.json
+
 3- How the url is calculated:
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -91,3 +95,15 @@ form_type: This field represents the form type, which is the accessionNumber fro
 form_description: This field contains the generated URL, which links to the SEC document.
 filing_date: This field represents the date the form was filed, taken from filingDate.
 reporting_date: Currently set to "N/A", but this can be updated if the reporting date is available.
+
+
+5- NASDAQ price history data
+https://www.nasdaq.com/solutions/data-link-api#contact-us
+https://blog.data.nasdaq.com/api-for-stock-data
+6-tandardized SEC EDGAR up-to-date filings data from 1994.
+https://finazon.io/dataset/sec_edgar_filings/docs/api/latest#archive
+
+
+7- sec xblr zip file : https://www.sec.gov/Archives/edgar/data/0000320193/000032019324000081/0000320193-24-000081-xbrl.zip
+8- free stock market api: https://www.alphavantage.co/
+9- hack yahoo finance https://query2.finance.yahoo.com/v8/finance/chart/AAPL?period1=1726785600&period2=1727614800&interval=5m&includePrePost=true&events=div%7Csplit%7Cearn&&lang=en-US&region=US
