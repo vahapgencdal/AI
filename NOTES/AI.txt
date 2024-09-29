@@ -5,3 +5,89 @@ https://www.nasdaq.com/market-activity/stocks/screener
 
 NASDAQ API CALL 1: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25
 NASDAQ API CALL 2: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25&exchange=NYSE&exsubcategory=NGM&marketcap=mega&recommendation=strong_buy|hold|buy|sell|strong_sell&sector=technology&region=north_america&country=united_states|usa
+
+1- EDGAR NVDA:https://www.sec.gov/ix?doc=/Archives/edgar/data/1045810/000104581024000264/nvda-20240728.htm 
+2- companies and sic code databases: https://www.edgarcompany.sec.gov/servlet/CompanyDBSearch?start_row=1&end_row=10&main_back=2&cik=&company_name=&reporting_file_number=&series_id=&series_name=&class_contract_id=&class_contract_name=&state_country=NONE&city=&state_incorporation=NONE&zip_code=&last_update_from=&last_update_to=&page=summary&submit_button=Next+%3E%3E
+3- How the url is calculated:
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.io.IOException;
+
+public class JSONTableGenerator {
+    public static void main(String[] args) {
+        try {
+            // Load the JSON file
+            String jsonContent = new String(Files.readAllBytes(Paths.get("submissions.json")));
+            JSONObject jsonObject = new JSONObject(jsonContent);
+
+            // Extract relevant fields from the JSON
+            String cik = jsonObject.getString("cik");
+            JSONArray accessionNumbers = jsonObject.getJSONObject("filings").getJSONObject("recent").getJSONArray("accessionNumber");
+            JSONArray filingDates = jsonObject.getJSONObject("filings").getJSONObject("recent").getJSONArray("filingDate");
+            String ticker = jsonObject.getJSONArray("tickers").getString(0);  // e.g., "AAPL"
+            String fiscalYearEnd = jsonObject.getString("fiscalYearEnd");  // e.g., "0928"
+
+            // Create a JSONArray for the resulting table
+            JSONArray jsonTable = new JSONArray();
+
+            // Loop through filings and create JSON rows
+            for (int i = 0; i < accessionNumbers.length(); i++) {
+                String accessionNumber = accessionNumbers.getString(i);
+                String filingDate = filingDates.getString(i);
+
+                // Extract the year and create the document name
+                String filingYear = filingDate.substring(0, 4);
+                String documentName = ticker.toLowerCase() + "-" + filingYear + fiscalYearEnd + ".htm";
+
+                // Construct the URL
+                String secUrl = "https://www.sec.gov/ix?doc=/Archives/edgar/data/" + cik + "/"
+                                + accessionNumber.replace("-", "") + "/" + documentName;
+
+                // Create a JSON object for the row
+                JSONObject jsonRow = new JSONObject();
+                jsonRow.put("form_type", accessionNumber);
+                jsonRow.put("form_description", secUrl);
+                jsonRow.put("filing_date", filingDate);
+                jsonRow.put("reporting_date", "N/A");  // Assuming reporting date is N/A for now
+
+                // Add the row to the table
+                jsonTable.put(jsonRow);
+            }
+
+            // Output the JSON table
+            System.out.println(jsonTable.toString(4));  // Pretty print with indentation
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+Explanation:
+JSON Array for Table: Instead of building an HTML table, we create a JSONArray to hold each row of the table.
+Building Rows: For each filing, we create a JSONObject that represents a row in the table, containing form_type, form_description (the URL), filing_date, and reporting_date.
+Formatting the URL: The same logic from the previous code to construct the URL is applied here.
+Output: The JSONArray is printed in a pretty-printed format using toString(4) to make it easier to read.
+
+[
+    {
+        "form_type": "0000320193-24-000081",
+        "form_description": "https://www.sec.gov/ix?doc=/Archives/edgar/data/0000320193/000032019324000081/aapl-20240629.htm",
+        "filing_date": "2024-08-02",
+        "reporting_date": "N/A"
+    },
+    {
+        "form_type": "0000320193-24-000080",
+        "form_description": "https://www.sec.gov/ix?doc=/Archives/edgar/data/0000320193/000032019324000080/aapl-20240629.htm",
+        "filing_date": "2024-08-01",
+        "reporting_date": "N/A"
+    },
+    ...
+]
+
+form_type: This field represents the form type, which is the accessionNumber from the JSON file.
+form_description: This field contains the generated URL, which links to the SEC document.
+filing_date: This field represents the date the form was filed, taken from filingDate.
+reporting_date: Currently set to "N/A", but this can be updated if the reporting date is available.
