@@ -69,6 +69,7 @@ Remember, while the SEC provides these standards and templates, interpreting fin
 1-Sentiment Analysis and Natural Language Processing (NLP) for SEC Filings
 https://blog.mlq.ai/sentiment-analysis-natural-language-processing-for-sec-filings/
 --- This is the almost same thing we are going to achieve
+--- Sentiment analysis (NLP analysis) takes 10-K reports for the past and analyzes them based on the main segments. Sentiment analysis can predict future buy or sell options.Buying / selling and holding options are dependent on similarity points. If company's similarity points is low that means buy or sell option. In order to understand buy or sell option look sentiment. If it is negative sell, otherwise buy. Conversely, high similarity points means that holding current position.
 
 2- The Positive Similarity of Company Filings and the Cross-Section of Stock Returns
 https://quantpedia.com/the-positive-similarity-of-company-filings-and-the-cross-section-of-stock-returns/
