@@ -2,6 +2,22 @@
 NASDAQ listed all companies: 
 https://www.nasdaq.com/market-activity/stocks/screener
 
+1. Nasdag da listelenmis olan butun sirketleri bulmak
+NASDAQ API CALL 1: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25
+NASDAQ API CALL 2: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25&exchange=NYSE&exsubcategory=NGM&marketcap=mega&recommendation=strong_buy|hold|buy|sell|strong_sell&sector=technology&region=north_america&country=united_states|usa
+
+2. Nasdag taki sirketlerin CIK nolarini bulmamiz gerekiyor
+https://www.sec.gov/include/ticker.txt
+
+3. Nasdag da listlenmis olan bir sirketi alip sec de aratmak onregin: NVDA
+https://data.sec.gov/submissions/CIK0001045810.json
+3. 
+https://data.sec.gov/submissions/CIK0000320193.json - 2014 ve sonrasi
+https://data.sec.gov/submissions/CIK0000320193-submissions-001.json -- 2014 ve onceki raporlar
+
+
+https://www.sec.gov/ix?doc=/Archives/edgar/data/0000320193/000032019324000006/aapl-20231230.htm
+
 
 NASDAQ API CALL 1: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25
 NASDAQ API CALL 2: https://api.nasdaq.com/api/screener/stocks?tableonly=false&limit=25&exchange=NYSE&exsubcategory=NGM&marketcap=mega&recommendation=strong_buy|hold|buy|sell|strong_sell&sector=technology&region=north_america&country=united_states|usa

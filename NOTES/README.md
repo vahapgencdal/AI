@@ -65,3 +65,17 @@ Developing a program to extract specific XBRL tags across multiple company filin
 Being aware of industry-specific variations in reporting, even within the standardized framework.
 
 Remember, while the SEC provides these standards and templates, interpreting financial data still requires careful analysis and understanding of each company's specific context and industry. The standardization helps with comparability, but it doesn't eliminate the need for thoughtful analysis.
+
+1-Sentiment Analysis and Natural Language Processing (NLP) for SEC Filings
+https://blog.mlq.ai/sentiment-analysis-natural-language-processing-for-sec-filings/
+--- This is the almost same thing we are going to achieve
+
+2- The Positive Similarity of Company Filings and the Cross-Section of Stock Returns
+https://quantpedia.com/the-positive-similarity-of-company-filings-and-the-cross-section-of-stock-returns/
+--- We already know these effects thats why I want to check long term investment we dont want to make trading we want to make investment
+analysis
+3- Welcome to the SageMaker JumpStart Industry Documentation!
+https://sagemaker-jumpstart-industry-pack.readthedocs.io/en/latest/notebooks/finance/notebook4/SEC_10K_10Q_8K_section_extraction.html
+-- These is nice we can use it but we already know how to parse them
+-- if it is free we can use it, 
+
