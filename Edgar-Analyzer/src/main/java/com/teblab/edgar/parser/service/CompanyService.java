@@ -29,10 +29,16 @@ public class CompanyService {
         this.companyRepository = companyRepository;
     }
 
-    public boolean matchCidNumbers() throws IOException {
-        List<TickerDTO> tickers = tickerService.readFileFromResources().stream().map(parts -> new TickerDTO(parts[0], parts[1])).toList();
+    public List<JSONArray> fillSubmissions() throws IOException {
+        List<TickerDTO> tickers = new ArrayList<>(); //tickerService.readFileFromResources().stream().map(parts -> new TickerDTO(parts[0], parts[1])).toList();
 
-        tickers = tickers.stream().filter(tickerDTO -> tickerDTO.getNumber().equals("320193") || tickerDTO.getNumber().equals("1045810")).toList();
+        List<JSONArray> reportsTable= new ArrayList<>();
+
+        TickerDTO tickerDTO = new TickerDTO();
+        tickerDTO.setNumber("320193");
+        tickers.add(tickerDTO);
+
+        //tickers = tickers.stream().filter(tickerDTO -> tickerDTO.getNumber().equals("320193") || tickerDTO.getNumber().equals("1045810")).toList();
 
         for (TickerDTO ticker : tickers) {
             String submissionUrl = tickerService.getSubmissionUrl(ticker.getNumber());
@@ -41,26 +47,29 @@ public class CompanyService {
             String submission = tickerService.getSubmission(submissionUrl);
             String submission001 = tickerService.getSubmission(submission001Url);
 
-            List<FillingDTO> fillingDTOList = parseJSONData(submission, ticker, false);
-            List<FillingDTO> oldFillingDTOList= parseJSONData(submission001, ticker, true);
+            //List<FillingDTO> fillingDTOList = parseJSONData(submission, ticker, false);
+            //List<FillingDTO> oldFillingDTOList= parseJSONData(submission001, ticker, true);
 
+            JSONArray jsonArray =  getReportsTable(submission,ticker.getNumber());
 
-            List<CompanyFilling> fillingList = new ArrayList<>();
+            reportsTable.add(jsonArray);
 
-            List<CompanyFilling> newFillingList = fillingDTOList.stream().map(NasdaqApiEntityParser::parseFillingToCompanyFilling).toList();
-            List<CompanyFilling> oldFillingList = oldFillingDTOList.stream().map(NasdaqApiEntityParser::parseFillingToCompanyFilling).toList();
+           // List<CompanyFilling> fillingList = new ArrayList<>();
 
-            fillingList.addAll(newFillingList);
-            fillingList.addAll(oldFillingList);
+           // List<CompanyFilling> newFillingList = fillingDTOList.stream().map(NasdaqApiEntityParser::parseFillingToCompanyFilling).toList();
+          //  List<CompanyFilling> oldFillingList = oldFillingDTOList.stream().map(NasdaqApiEntityParser::parseFillingToCompanyFilling).toList();
 
-            Company company = new Company();
-            company.setCidNumber(ticker.getNumber());
-            company.setSymbol(ticker.getSymbol());
-            company.setCompanyFillings(fillingList);
-            company.setSubmissionBlobNewUrl(submissionUrl);
-            company.setSubmissionBlobOldUrl(submission001Url);
+          //  fillingList.addAll(newFillingList);
+          //  fillingList.addAll(oldFillingList);
 
-            companyRepository.save(company);
+          //  Company company = new Company();
+          //  company.setCidNumber(ticker.getNumber());
+         //   company.setSymbol(ticker.getSymbol());
+         //   company.setCompanyFillings(fillingList);
+         //   company.setSubmissionBlobNewUrl(submissionUrl);
+         //   company.setSubmissionBlobOldUrl(submission001Url);
+
+           // companyRepository.save(company);
 
         }
 
@@ -73,7 +82,7 @@ public class CompanyService {
         //https://data.sec.gov/submissions/CIK0000320193-submissions-001.json
         //https://data.sec.gov/submissions/CIK0001584509-submissions-001.json
 
-        return true;
+        return reportsTable;
     }
 
     public List<FillingDTO> parseJSONData(String jsonData, TickerDTO tickerDTO, boolean isOld) throws IOException {
@@ -86,8 +95,8 @@ public class CompanyService {
         for (int i = 0; i < filings.path("accessionNumber").size(); i++) {
             FillingDTO filing = new FillingDTO(
                     filings.path("accessionNumber").get(i).asText(),
-                    LocalDate.parse(filings.path("filingDate").get(i).asText()),
-                    LocalDate.parse(filings.path("reportDate").get(i).asText()),
+                    null,
+                    null,
                     filings.path("form").get(i).asText(),
                     filings.path("primaryDocument").get(i).asText(),
                     filings.path("primaryDocDescription").get(i).asText(),
